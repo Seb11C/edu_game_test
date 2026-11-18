@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Poesía en juego · 2do grado</title>
+  <!-- Estilos con enfoque DUA 3.0: accesible, responsivo, colores suaves, tipografía clara -->
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+      background: linear-gradient(145deg, #f9f1e0 0%, #f0e6d2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      color: #1e2f4e;
+    }
+
+    .game-container {
+      max-width: 720px;
+      width: 100%;
+      background: #fffbf2;
+      border-radius: 48px 48px 32px 32px;
+      box-shadow: 0 20px 30px rgba(0, 20, 30, 0.15), 0 6px 12px rgba(0, 0, 0, 0.1);
+      padding: 28px 22px 32px;
+      border: 3px solid #ffd966;
+      transition: all 0.2s;
+    }
+
+    h1 {
+      font-size: 1.9rem;
+      text-align: center;
+      color: #2a4d6e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+      letter-spacing: -0.3px;
+    }
+
+    h1 span {
+      background: #ffe69b;
+      padding: 6px 18px;
+      border-radius: 60px;
+      font-size: 1.3rem;
+      border: 2px dashed #b8860b;
+      color: #3b2e0e;
+    }
+
+    .info-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #e3f0ea;
+      padding: 12px 20px;
+      border-radius: 50px;
+      margin-bottom: 22px;
+      font-weight: bold;
+      border: 2px solid #8db5a5;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .level-badge {
+      background: #2f6b5e;
+      color: white;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .score-box {
+      background: #ffb347;
+      padding: 6px 20px;
+      border-radius: 40px;
+      color: #1f3a2e;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 2px solid #c47e1a;
+      box-shadow: 0 3px 0 #a05e10;
+    }
+
+    .poem-card {
+      background: #fef9e8;
+      border-radius: 36px;
+      padding: 20px 18px;
+      border: 3px solid #cfb87c;
+      box-shadow: inset 0 0 0 2px #fff6d9, 0 8px 0 #b39b5c;
+      margin-bottom: 26px;
+      transition: all 0.3s;
+    }
+
+    .poem-title {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: #845d3c;
+      text-align: center;
+      margin-bottom: 12px;
+      text-shadow: 2px 2px 0 #f1dcb0;
+      letter-spacing: -0.2px;
+    }
+
+    .poem-text {
+      font-size: 1.25rem;
+      line-height: 1.8;
+      white-space: pre-line;
+      text-align: center;
+      color: #293d4b;
+      font-weight: 500;
+      padding: 8px;
+      background: #fffdf5;
+      border-radius: 28px;
+      border: 2px dotted #dfcba4;
+    }
+
+    .question-area {
+      background: #d9e9e2;
+      border-radius: 32px;
+      padding: 22px 16px 18px;
+      margin-bottom: 18px;
+      border: 2px solid #87b3a3;
+    }
+
+    .question-text {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1d4a3c;
+      margin-bottom: 18px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .question-text .emoji-big {
+      font-size: 2rem;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .option-btn {
+      background: white;
+      border: 3px solid #b1cfc1;
+      padding: 14px 18px;
+      border-radius: 60px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #1e3a30;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 5px 0 #a1b9ac;
+      width: 100%;
+      font-family: inherit;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      background: #f2fff8;
+      border-color: #4c9b7b;
+      transform: scale(1.01);
+    }
+
+    .option-btn.selected-correct {
+      background: #b7e3c5;
+      border-color: #2a7a4b;
+      box-shadow: 0 5px 0 #2a7a4b;
+    }
+
+    .option-btn.selected-wrong {
+      background: #fbc2c2;
+      border-color: #b13e3e;
+      box-shadow: 0 5px 0 #b13e3e;
+    }
+
+    .option-btn:disabled {
+      opacity: 0.9;
+      cursor: default;
+    }
+
+    .option-icon {
+      font-size: 1.6rem;
+      width: 36px;
+      text-align: center;
+    }
+
+    .feedback-message {
+      font-size: 1.2rem;
+      font-weight: 600;
+      padding: 14px 18px;
+      border-radius: 50px;
+      margin-top: 12px;
+      text-align: center;
+      animation: pop 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .feedback-correct {
+      background: #c8f0d4;
+      color: #185a2b;
+      border-left: 8px solid #2b8c4b;
+    }
+
+    .feedback-incorrect {
+      background: #ffe0d0;
+      color: #8b2f1b;
+      border-left: 8px solid #c44f2b;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.95); opacity: 0.6; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 14px 28px;
+      border-radius: 60px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      border: none;
+      background: #ffc85e;
+      color: #2c2a1e;
+      cursor: pointer;
+      transition: all 0.1s;
+      box-shadow: 0 7px 0 #b8862a;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: inherit;
+      border: 2px solid #f5e7c8;
+    }
+
+    .btn:active {
+      transform: translateY(5px);
+      box-shadow: 0 2px 0 #b8862a;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      transform: translateY(4px);
+      box-shadow: 0 3px 0 #b8862a;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: #d0e2db;
+      box-shadow: 0 7px 0 #8eaa9e;
+      color: #1a3b2e;
+    }
+
+    .btn-secondary:active {
+      box-shadow: 0 2px 0 #8eaa9e;
+    }
+
+    .level-progress {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 18px;
+    }
+
+    .dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #c7bc9a;
+      border: 2px solid #9e8e62;
+      transition: all 0.2s;
+    }
+
+    .dot.active {
+      background: #ffb347;
+      border-color: #b45f06;
+      transform: scale(1.2);
+      box-shadow: 0 0 0 3px #ffdc9a;
+    }
+
+    .dot.completed {
+      background: #56b185;
+      border-color: #1e6b48;
+    }
+
+    /* DUA: accesibilidad de texto, alto contraste, tamaños grandes */
+    @media (max-width: 500px) {
+      .game-container { padding: 20px 14px; }
+      h1 { font-size: 1.6rem; }
+      .poem-text { font-size: 1.1rem; }
+      .option-btn { font-size: 1.05rem; padding: 12px 14px; }
+      .btn { font-size: 1rem; padding: 12px 20px; }
+      .question-text { font-size: 1.15rem; }
+    }
+
+    /* Animación para refuerzo positivo */
+    .celebrate {
+      animation: bounce 0.5s;
+    }
+
+    @keyframes bounce {
+      0% { transform: translateY(0); }
+      30% { transform: translateY(-8px); }
+      60% { transform: translateY(4px); }
+      100% { transform: translateY(0); }
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+    }
+
+    .highlight {
+      background: #fff2b5;
+      padding: 0 4px;
+      border-radius: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container" id="gameContainer">
+    <h1>
+      🐣 Poesía en juego 
+      <span>2° grado</span>
+    </h1>
+
+    <!-- Barra de información: nivel y puntaje -->
+    <div class="info-bar">
+      <div class="level-badge" id="levelDisplay">
+        <span>🌱</span> Nivel <span id="levelNumber">1</span>
+      </div>
+      <div class="score-box" id="scoreDisplay">
+        <span>⭐</span> <span id="scoreValue">0</span> pts
+      </div>
+    </div>
+
+    <!-- Tarjeta del poema (cambia según nivel) -->
+    <div class="poem-card" id="poemCard">
+      <div class="poem-title" id="poemTitle">La nube</div>
+      <div class="poem-text" id="poemText">Una nube blanca
+juega con el viento,
+se pone un sombrero
+y saluda al sol contento.</div>
+    </div>
+
+    <!-- Área de pregunta -->
+    <div class="question-area">
+      <div class="question-text" id="questionText">
+        <span class="emoji-big">🤔</span> ¿Con quién juega la nube?
+      </div>
+      <div class="options-grid" id="optionsContainer">
+        <!-- Botones generados por JS -->
+      </div>
+      <div id="feedbackMessage" class="feedback-message" style="display: none;"></div>
+    </div>
+
+    <!-- Botones de navegación -->
+    <div class="nav-buttons">
+      <button class="btn btn-secondary" id="nextBtn" disabled>
+        Siguiente ➡️
+      </button>
+      <button class="btn" id="restartBtn" style="background: #c7e0d6; box-shadow: 0 7px 0 #8fa99c;">
+        🔄 Reiniciar
+      </button>
+    </div>
+
+    <!-- Indicador de progreso de niveles -->
+    <div class="level-progress" id="progressDots">
+      <!-- Se llena con JS -->
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      // ========== DATOS DEL JUEGO ==========
+      // 3 niveles con poemas cortos, preguntas de comprensión literal e inferencial
+      const levels = [
+        {
+          poemTitle: "La nube",
+          poemText: "Una nube blanca\njuega con el viento,\nse pone un sombrero\ny saluda al sol contento.",
+          question: "¿Con quién juega la nube?",
+          options: [
+            { text: "Con el sol", emoji: "☀️", correct: false },
+            { text: "Con el viento", emoji: "🌬️", correct: true },
+            { text: "Con la lluvia", emoji: "🌧️", correct: false }
+          ],
+          // Retroalimentación específica
+          correctFeedback: "¡Muy bien! La nube juega con el viento. El poema lo dice claramente.",
+          incorrectFeedback: "Casi... Vuelve a leer: 'Una nube blanca juega con el viento'. El viento es su amigo."
+        },
+        {
+          poemTitle: "El gato juguetón",
+          poemText: "Mi gato Mimoso\nsalta y corre sin parar,\npersigue su cola\ny no la puede alcanzar.",
+          question: "¿Qué persigue el gato?",
+          options: [
+            { text: "Un ratón", emoji: "🐭", correct: false },
+            { text: "Su cola", emoji: "🐈", correct: true },
+            { text: "Una pelota", emoji: "⚽", correct: false }
+          ],
+          correctFeedback: "¡Exacto! El gato persigue su cola. ¡Qué divertido!",
+          incorrectFeedback: "Lee otra vez: 'persigue su cola y no la puede alcanzar'. ¡La cola es la respuesta!"
+        },
+        {
+          poemTitle: "La estrella",
+          poemText: "Una estrella pequeñita\nbrilla en el cielo azul,\npor la noche nos saluda\ny nos alumbra desde allí.",
+          question: "¿Cuándo nos saluda la estrella?",
+          options: [
+            { text: "Por la mañana", emoji: "🌞", correct: false },
+            { text: "Por la noche", emoji: "🌙", correct: true },
+            { text: "Por la tarde", emoji: "🌅", correct: false }
+          ],
+          correctFeedback: "¡Genial! La estrella sale por la noche y nos saluda desde el cielo.",
+          incorrectFeedback: "Presta atención: 'por la noche nos saluda'. ¡La noche es el momento!"
+        }
+      ];
+
+      // ========== ESTADO ==========
+      let currentLevel = 0;
+      let score = 0;
+      let answered = false;         // si ya se respondió la pregunta actual
+      let selectedOptionIndex = -1; // índice de la opción seleccionada
+      let gameCompleted = false;    // para no reiniciar sin querer
+
+      // ========== REFERENCIAS DOM ==========
+      const poemTitleEl = document.getElementById('poemTitle');
+      const poemTextEl = document.getElementById('poemText');
+      const questionTextEl = document.getElementById('questionText');
+      const optionsContainer = document.getElementById('optionsContainer');
+      const feedbackMessageEl = document.getElementById('feedbackMessage');
+      const nextBtn = document.getElementById('nextBtn');
+      const restartBtn = document.getElementById('restartBtn');
+      const levelNumberEl = document.getElementById('levelNumber');
+      const scoreValueEl = document.getElementById('scoreValue');
+      const progressDots = document.getElementById('progressDots');
+      const gameContainer = document.getElementById('gameContainer');
+
+      // ========== FUNCIONES ==========
+      function updateScoreDisplay() {
+        scoreValueEl.textContent = score;
+      }
+
+      // Generar los dots de progreso
+      function renderProgressDots() {
+        progressDots.innerHTML = '';
+        levels.forEach((_, idx) => {
+          const dot = document.createElement('div');
+          dot.classList.add('dot');
+          if (idx === currentLevel) dot.classList.add('active');
+          if (idx < currentLevel) dot.classList.add('completed');
+          progressDots.appendChild(dot);
+        });
+      }
+
+      // Cargar el nivel actual
+      function loadLevel() {
+        const level = levels[currentLevel];
+        poemTitleEl.textContent = level.poemTitle;
+        poemTextEl.textContent = level.poemText;
+        questionTextEl.innerHTML = `<span class="emoji-big">🤔</span> ${level.question}`;
+        
+        // Reiniciar estado de respuesta
+        answered = false;
+        selectedOptionIndex = -1;
+        feedbackMessageEl.style.display = 'none';
+        feedbackMessageEl.innerHTML = '';
+        nextBtn.disabled = true;
+        
+        // Actualizar número de nivel
+        levelNumberEl.textContent = currentLevel + 1;
+
+        // Renderizar opciones
+        optionsContainer.innerHTML = '';
+        level.options.forEach((opt, idx) => {
+          const btn = document.createElement('button');
+          btn.classList.add('option-btn');
+          btn.innerHTML = `<span class="option-icon">${opt.emoji}</span> <span>${opt.text}</span>`;
+          btn.dataset.index = idx;
+          btn.addEventListener('click', () => onOptionClick(idx));
+          optionsContainer.appendChild(btn);
+        });
+
+        // Asegurar que los botones estén habilitados
+        document.querySelectorAll('.option-btn').forEach(btn => btn.disabled = false);
+
+        // Actualizar dots
+        renderProgressDots();
+
+        // Pequeña animación de entrada (opcional)
+        poemTitleEl.classList.add('celebrate');
+        setTimeout(() => poemTitleEl.classList.remove('celebrate'), 500);
+      }
+
+      // Manejar clic en una opción
+      function onOptionClick(index) {
+        if (answered) return; // ya respondió, no hacer nada
+
+        const level = levels[currentLevel];
+        const option = level.options[index];
+        const isCorrect = option.correct;
+
+        // Marcar como respondido
+        answered = true;
+        selectedOptionIndex = index;
+
+        // Deshabilitar todos los botones
+        document.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
+
+        // Resaltar la opción seleccionada (correcta o incorrecta)
+        const buttons = document.querySelectorAll('.option-btn');
+        buttons.forEach((btn, i) => {
+          if (i === index) {
+            btn.classList.add(isCorrect ? 'selected-correct' : 'selected-wrong');
+          }
+          // También marcar la correcta si el usuario falló? No, mejor no para no confundir.
+          // Pero podemos mostrar la correcta con un pequeño borde? 
+          // DUA: retroalimentación inmediata, mostramos la correcta si falló.
+          if (!isCorrect && level.options[i].correct) {
+            // Resaltar sutilmente la correcta (opcional, no la marcamos como selected-correct para no confundir)
+            btn.style.border = '3px solid #2a7a4b';
+            btn.style.backgroundColor = '#e1f3e9';
+          }
+        });
+
+        // Actualizar puntaje
+        if (isCorrect) {
+          score += 10;
+          updateScoreDisplay();
+        } else {
+          // Podemos restar? No, mejor no restar en primaria. Solo no sumar.
+        }
+
+        // Mostrar retroalimentación
+        feedbackMessageEl.style.display = 'flex';
+        if (isCorrect) {
+          feedbackMessageEl.className = 'feedback-message feedback-correct';
+          feedbackMessageEl.innerHTML = `✅ ${level.correctFeedback}`;
+          // Animación de celebración
+          gameContainer.classList.add('celebrate');
+          setTimeout(() => gameContainer.classList.remove('celebrate'), 500);
+        } else {
+          feedbackMessageEl.className = 'feedback-message feedback-incorrect';
+          feedbackMessageEl.innerHTML = `❌ ${level.incorrectFeedback}`;
+        }
+
+        // Habilitar botón siguiente
+        nextBtn.disabled = false;
+      }
+
+      // Avanzar al siguiente nivel o finalizar
+      function goToNextLevel() {
+        if (!answered) return; // seguridad
+
+        if (currentLevel < levels.length - 1) {
+          // Avanzar
+          currentLevel++;
+          loadLevel();
+        } else {
+          // Juego completado
+          gameCompleted = true;
+          // Mostrar mensaje final
+          questionTextEl.innerHTML = `<span class="emoji-big">🎉</span> ¡Felicidades! Has completado todos los niveles.`;
+          optionsContainer.innerHTML = '';
+          feedbackMessageEl.style.display = 'flex';
+          feedbackMessageEl.className = 'feedback-message feedback-correct';
+          feedbackMessageEl.innerHTML = `⭐ Puntaje final: ${score} puntos. ¡Eres un gran lector de poesía! ⭐`;
+          nextBtn.disabled = true;
+          restartBtn.disabled = false;
+          // Actualizar dots
+          renderProgressDots();
+          // Pequeña animación
+          gameContainer.classList.add('celebrate');
+          setTimeout(() => gameContainer.classList.remove('celebrate'), 1000);
+        }
+      }
+
+      // Reiniciar juego
+      function restartGame() {
+        currentLevel = 0;
+        score = 0;
+        answered = false;
+        selectedOptionIndex = -1;
+        gameCompleted = false;
+        updateScoreDisplay();
+        loadLevel();
+        // Restaurar botones
+        nextBtn.disabled = true;
+        restartBtn.disabled = false;
+        // Limpiar cualquier resaltado extra
+      }
+
+      // Inicializar el juego
+      function initGame() {
+        currentLevel = 0;
+        score = 0;
+        updateScoreDisplay();
+        loadLevel();
+        nextBtn.disabled = true;
+        restartBtn.disabled = false;
+
+        // Event listeners
+        nextBtn.addEventListener('click', goToNextLevel);
+        restartBtn.addEventListener('click', restartGame);
+      }
+
+      // Iniciar
+      initGame();
+
+    })();
+  </script>
+</body>
+</html>
